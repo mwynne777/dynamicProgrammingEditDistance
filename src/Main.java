@@ -4,10 +4,10 @@ public class Main {
 	public static void main(String[] args) {	
 		String str1 = "babb";
 		String str2 = "aabab";
-		System.out.println("Total edit distance between str1 and str2 is: " + editDistance(str1, str2));
+		System.out.println("Total edit distance between str1 and str2 is: " + editDistance(str1, str2)[str2.length()][str1.length()]);
 	}
 
-	public static int editDistance(String s1, String s2){		
+	public static int[][] editDistance(String s1, String s2){		
 		int[][] table = new int[s2.length() + 1][s1.length() + 1];	
 		for(int i = 0; i < s2.length() + 1; i++){
 			for(int j = 0; j < s1.length() + 1; j ++){
@@ -30,7 +30,7 @@ public class Main {
 			}
 		}
 		System.out.println();
-		return table[s2.length()][s1.length()];
+		return table;
 	}
 	public static void traceback(){
 		//Perform traceback on table to find where spaces belong
