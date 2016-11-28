@@ -1,9 +1,34 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
 
 public class Main {
 	
-	public static void main(String[] args) {	
-		String str1 = "intention";
-		String str2 = "execution";
+	public static void main(String[] args) throws FileNotFoundException {
+		String str1 = "";
+		String str2 = "";
+		if(args.length != 0){
+			FileReader fileReader = new FileReader(args[0]);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			try
+			{
+				bufferedReader.readLine();
+				str1 = bufferedReader.readLine();
+				str2 = bufferedReader.readLine();
+				bufferedReader.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+		}else{
+			str1 = "babb";
+			str2 = "aabab";
+		}
 		System.out.println("Total edit distance between str1 and str2 is: " + editDistance(str1, str2)[str2.length()][str1.length()]);
 		traceback(editDistance(str1, str2), str1, str2);
 	}
@@ -49,10 +74,10 @@ public class Main {
 				xLength -= 1;
 			}else */
 			if(str1.charAt(yLength-1) != str2.charAt(xLength-1) && (table[xLength-1][yLength] == (table[xLength][yLength] - 1) || (table[xLength-1][yLength] < table[xLength][yLength-1] && table[xLength-1][yLength] < table[xLength-1][yLength-1]))){
-				str1 = str1.substring(0, yLength) + "-" + str1.substring(yLength, str1.length());
+				str1 = str1.substring(0, yLength) + "_" + str1.substring(yLength, str1.length());
 				xLength -= 1;
 			}else if(str1.charAt(yLength-1) != str2.charAt(xLength-1) && (table[xLength][yLength-1] == (table[xLength][yLength] - 1) || (table[xLength][yLength-1] < table[xLength-1][yLength] && table[xLength][yLength-1] < table[xLength-1][yLength-1]))){
-				str2 = str2.substring(0, xLength) + "-" + str2.substring(xLength, str2.length());
+				str2 = str2.substring(0, xLength) + "_" + str2.substring(xLength, str2.length());
 				yLength -= 1;
 			}else if(table[xLength -1][yLength - 1] == table[xLength][yLength] /*&& str1.charAt(yLength-1) == str2.charAt(xLength-1) && table[xLength-1][yLength] != (table[xLength][yLength] - 1) && table[xLength][yLength - 1] != (table[xLength][yLength] - 1)*/){
 				//System.out.println(str1.charAt(yLength-1) + "  " + str2.charAt(xLength-1));
