@@ -2,9 +2,10 @@
 public class Main {
 	
 	public static void main(String[] args) {	
-		String str1 = "babb";
-		String str2 = "aabab";
+		String str1 = "intention";
+		String str2 = "execution";
 		System.out.println("Total edit distance between str1 and str2 is: " + editDistance(str1, str2)[str2.length()][str1.length()]);
+		traceback(editDistance(str1, str2), str1, str2);
 	}
 
 	public static int[][] editDistance(String s1, String s2){		
@@ -23,16 +24,48 @@ public class Main {
 				}		
 			}	
 		}
+		//Simply print the array
 		for(int c = 0; c < s2.length() + 1; c++){
 			System.out.println();
 			for(int d = 0; d < s1.length() + 1; d++){
-				System.out.print(table[c][d]);
+				System.out.print(table[c][d] + " ");
 			}
 		}
 		System.out.println();
 		return table;
 	}
-	public static void traceback(){
+	public static void traceback(int[][] table, String str1, String str2){
 		//Perform traceback on table to find where spaces belong
+		int xLength = table.length - 1;  //Number of columns in the table
+		int yLength = table[0].length - 1;  //Number of rows in the table
+		System.out.println(xLength + "  " + yLength);
+		
+		while(xLength >= 1 && yLength >= 1){
+			System.out.println("Hello, xLength = " + xLength + " yLength = " + yLength);
+			System.out.println(table[xLength][yLength] + "   " + table[xLength-1][yLength-1]);
+			/*if(yLength == 1){  //If we hit the top of the table, we need to move left
+				yLength -= 1;
+			}else if(xLength == 1){  //If we hit the left end of the table, we need to move up
+				xLength -= 1;
+			}else */
+			if(str1.charAt(yLength-1) != str2.charAt(xLength-1) && (table[xLength-1][yLength] == (table[xLength][yLength] - 1) || (table[xLength-1][yLength] < table[xLength][yLength-1] && table[xLength-1][yLength] < table[xLength-1][yLength-1]))){
+				str1 = str1.substring(0, yLength) + "-" + str1.substring(yLength, str1.length());
+				xLength -= 1;
+			}else if(str1.charAt(yLength-1) != str2.charAt(xLength-1) && (table[xLength][yLength-1] == (table[xLength][yLength] - 1) || (table[xLength][yLength-1] < table[xLength-1][yLength] && table[xLength][yLength-1] < table[xLength-1][yLength-1]))){
+				str2 = str2.substring(0, xLength) + "-" + str2.substring(xLength, str2.length());
+				yLength -= 1;
+			}else if(table[xLength -1][yLength - 1] == table[xLength][yLength] /*&& str1.charAt(yLength-1) == str2.charAt(xLength-1) && table[xLength-1][yLength] != (table[xLength][yLength] - 1) && table[xLength][yLength - 1] != (table[xLength][yLength] - 1)*/){
+				//System.out.println(str1.charAt(yLength-1) + "  " + str2.charAt(xLength-1));
+				xLength -= 1;
+				yLength -= 1;
+			} else if(table[xLength -1][yLength - 1] == table[xLength][yLength] - 1){
+				xLength -= 1;
+				yLength -= 1;
+			}
+			System.out.println("Goodbye, xLength = " + xLength + " yLength = " + yLength);
+
+		}
+		System.out.println(str1);
+		System.out.println(str2);
 	}
 }
